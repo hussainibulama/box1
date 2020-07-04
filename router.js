@@ -13,6 +13,9 @@ class Router {
     this.logout(app, db);
     this.isLoggedIn(app, db);
     this.fetchhistory(app, db);
+    this.DeleteCard(app, db);
+    this.fetchcard(app, db);
+    this.trackingshipment(app, db);
   }
   login(app, db) {
     app.post("/login", (req, res) => {
@@ -43,7 +46,7 @@ class Router {
                   res.json({
                     success: true,
                     sessionID: data[0].id,
-                    username: cols,
+                    username: data[0].username,
                     name: data[0].name,
                     state: data[0].state,
                     address: data[0].address,
@@ -283,10 +286,12 @@ class Router {
 
               // Use the service
               const options = {
-                to: ["+234" + "08136668344"],
+                to: ["+234" + req.body.senderphone],
                 message:
-                  "Your pickup is schedule successfully with a tracking id" +
+                  "Your Pickup is scheduled and your tracking id is: " +
+                  " " +
                   trackingid +
+                  " " +
                   "Thank you for trusting us",
                 shortCode: "21524",
                 keyword: "Box1 Verification",
@@ -304,6 +309,7 @@ class Router {
 
               res.json({
                 success: true,
+                confirm: "no",
                 msg: "Pickup scheduled successfully, thank you",
               });
               return;
@@ -317,150 +323,88 @@ class Router {
           }
         );
       } else if (payment === "card") {
-        const Flutterwave = require("flutterwave-node-v3");
-        const open = require("open");
-
-        const flw = new Flutterwave(
-          "FLWPUBK_TEST-9662e3897f31cfe63cb8fb3e787cb851-X",
-          "FLWSECK_TEST-f7018e05a50953f84833d514cbb59ccb-X",
-          false
-        );
-        const payload = {
-          card_number: "5531886652142950",
-          cvv: "564",
-          expiry_month: "09",
-          expiry_year: "21",
-          currency: "NGN",
-          amount: "100",
-          redirect_url: "https://www.google.com",
-          fullname: "Olufemi Obafunmiso",
-          email: "olufemi@flw.com",
-          phone_number: "0902620185",
-          enckey: "FLWSECK_TEST2f0042343544",
-          tx_ref: "MC-" + Date.now(), // This is a unique reference, unique to the particular transaction being carried out. It is generated when it is not provided by the merchant for every transaction.
-        };
-
-        const chargeCard = async () => {
-          try {
-            const response = await flw.Charge.card(payload);
-            console.log(response);
-            if (response.meta.authorization.mode === "pin") {
-              let payload2 = payload;
-              payload2.authorization = {
-                mode: "pin",
-                fields: ["pin"],
-                pin: 3310,
-              };
-              const reCallCharge = await flw.Charge.card(payload2);
-
-              const callValidate = await flw.Charge.validate({
-                otp: "12345",
-                flw_ref: reCallCharge.data.flw_ref,
-              });
-              console.log(callValidate);
-            }
-            if (response.meta.authorization.mode === "redirect") {
-              var url = response.meta.authorization.redirect;
-              open(url);
-            }
-
-            console.log(response);
-            if (response.status === "success") {
-              const trackingid = Math.floor(100000000 + Math.random() * 900000);
-              db.query(
-                "INSERT INTO pickup SET ?",
-                {
-                  senderid: req.body.sessionID,
-                  trackingid: parseInt(trackingid),
-                  senderphone: req.body.senderphone,
-                  sendername: req.body.sendername,
-                  fromstate: req.body.from,
-                  tostate: req.body.to,
-                  date: req.body.date,
-                  time: req.body.time,
-                  plocation: req.body.plocation,
-                  dlocation: req.body.dlocation,
-                  rname: req.body.rname,
-                  rphone: req.body.rphone,
-                  itemtype: req.body.itemtype,
-                  itemweight: req.body.itemweight,
-                  amount: req.body.amount,
-                  payment: "Paid with Card",
-                },
-                (err, data, fields) => {
-                  if (err) {
-                    res.json({
-                      success: false,
-                      msg: "an error occured, please try again later",
-                    });
-                    return;
-                  }
-                  if (data) {
-                    const credentials = {
-                      apiKey:
-                        "739c3070dce5bf510a566d6bed6ae1c4c9451652ddc395cd535582da485857a9", // use your sandbox app API key for development in the test environment
-                      username: "box1", // use 'sandbox' for development in the test environment
-                    };
-                    const AfricasTalking = require("africastalking")(
-                      credentials
-                    );
-
-                    // Initialize a service e.g. SMS
-                    const sms = AfricasTalking.SMS;
-
-                    // Use the service
-                    const options = {
-                      to: ["+234" + "08136668344"],
-                      message:
-                        "Your Pickup is scheduled and your tracking id is " +
-                        " " +
-                        trackingid +
-                        " " +
-                        "Thank you for trusting us",
-                      shortCode: "21524",
-                      keyword: "Box1 Verification",
-                    };
-
-                    // Send message and capture the response or error
-                    sms
-                      .send(options)
-                      .then((response) => {
-                        console.log(response);
-                      })
-                      .catch((error) => {
-                        console.log(error);
-                      });
-
-                    res.json({
-                      success: true,
-                      msg: "Pickup scheduled successfully, thank you",
-                    });
-                    return;
-                  } else {
-                    res.json({
-                      success: false,
-                      msg: "you have an error with your form",
-                    });
-                    return;
-                  }
-                }
-              );
-            } else if (response.status === "error") {
+        const trackingid = Math.floor(100000000 + Math.random() * 900000);
+        db.query(
+          "INSERT INTO pickup SET ?",
+          {
+            senderid: req.body.sessionID,
+            trackingid: parseInt(trackingid),
+            senderphone: req.body.senderphone,
+            sendername: req.body.sendername,
+            fromstate: req.body.from,
+            tostate: req.body.to,
+            date: req.body.date,
+            time: req.body.time,
+            plocation: req.body.plocation,
+            dlocation: req.body.dlocation,
+            rname: req.body.rname,
+            rphone: req.body.rphone,
+            itemtype: req.body.itemtype,
+            itemweight: req.body.itemweight,
+            amount: req.body.amount,
+            payment: "Paid with Card",
+          },
+          (err, data, fields) => {
+            if (err) {
               res.json({
                 success: false,
-                msg: "Card Issue, Please use a valid Credit Card",
+                msg: "an error occured, please try again later",
               });
               return;
             }
-          } catch (error) {
-            console.log(error);
-          }
-        };
+            if (data) {
+              const credentials = {
+                apiKey:
+                  "739c3070dce5bf510a566d6bed6ae1c4c9451652ddc395cd535582da485857a9", // use your sandbox app API key for development in the test environment
+                username: "box1", // use 'sandbox' for development in the test environment
+              };
+              const AfricasTalking = require("africastalking")(credentials);
 
-        chargeCard();
+              // Initialize a service e.g. SMS
+              const sms = AfricasTalking.SMS;
+
+              // Use the service
+              const options = {
+                to: ["+234" + req.body.senderphone],
+                message:
+                  "Your Pickup is scheduled and your tracking id is: " +
+                  " " +
+                  trackingid +
+                  " " +
+                  "Please Complete your payment to enable us send a biker as soon as possible",
+                shortCode: "21524",
+                keyword: "Box1 Verification",
+              };
+
+              // Send message and capture the response or error
+              sms
+                .send(options)
+                .then((response) => {
+                  console.log(response);
+                })
+                .catch((error) => {
+                  console.log(error);
+                });
+
+              res.json({
+                success: true,
+                confirm: "yes",
+                msg: "Pickup scheduled successfully, thank you",
+              });
+              return;
+            } else {
+              res.json({
+                success: false,
+                msg: "you have an error with your form",
+              });
+              return;
+            }
+          }
+        );
       }
     });
   }
+
   CreditCard(app, db) {
     app.post("/addcard", (req, res) => {
       db.query(
@@ -469,7 +413,8 @@ class Router {
           ownerid: req.body.sessionID,
           cardnumber: req.body.number,
           cardname: req.body.name,
-          cardexpiration: req.body.expiry,
+          cardexpmonth: req.body.cardexpmonth,
+          cardexpyear: req.body.cardexpyear,
           cardcvv: req.body.cvc,
         },
         (err, data, fields) => {
@@ -483,7 +428,7 @@ class Router {
           if (data) {
             res.json({
               success: true,
-              msg: "Crd Saved successfully",
+              msg: "Card Saved successfully",
             });
             return;
           } else {
@@ -525,7 +470,11 @@ class Router {
             if (data && data.length === 1) {
               res.json({
                 success: true,
+                sessionID: data[0].id,
                 username: data[0].username,
+                name: data[0].name,
+                state: data[0].state,
+                address: data[0].address,
               });
               return true;
             } else {
@@ -555,6 +504,67 @@ class Router {
             res.json({
               success: false,
               msg: "No data",
+            });
+          }
+        }
+      );
+    });
+  }
+  DeleteCard(app, db) {
+    app.post("/deletecard", (req, res) => {
+      let id = req.body.sessionID;
+      db.query(
+        "DELETE FROM carddetails WHERE ownerid = ?",
+        id,
+        (err, data, fields) => {
+          if (data) {
+            res.end(JSON.stringify(data));
+          } else {
+            res.json({
+              success: false,
+              msg: "Please try later",
+            });
+          }
+        }
+      );
+    });
+  }
+  fetchcard(app, db) {
+    app.post("/fetchcard", (req, res) => {
+      let id = req.body.sessionID;
+      db.query(
+        "SELECT cardname, cardexpmonth, cardexpyear, cardcvv FROM carddetails WHERE ownerid = ?",
+        id,
+        (err, data, fields) => {
+          if (data) {
+            res.end(JSON.stringify(data));
+          } else {
+            res.json({
+              success: false,
+              msg: "Please try later",
+            });
+          }
+        }
+      );
+    });
+  }
+  trackingshipment(app, db) {
+    app.post("/trackshipment", (req, res) => {
+      let trackingid = req.body.trackingid;
+      db.query(
+        "SELECT status FROM pickup WHERE trackingid= ?",
+        trackingid,
+        (err, data, fields) => {
+          if (data && data.length === 1) {
+            res.json({
+              success: true,
+              status: data[0].status,
+            });
+            return;
+          } else {
+            res.json({
+              success: false,
+              msg: "This Tracking Id does not exits",
             });
           }
         }

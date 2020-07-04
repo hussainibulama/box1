@@ -1,27 +1,27 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "607412ea545717af8678fd5defaf465d",
+    "revision": "e063bdab6e2dfc03cc488a0a5daa9934",
     "url": "./index.html"
   },
   {
-    "revision": "1c097c6c2823e73b3944",
-    "url": "./static/css/2.593db715.chunk.css"
+    "revision": "eb79293a97bc81c1cef9",
+    "url": "./static/css/2.5206c547.chunk.css"
   },
   {
-    "revision": "cf59cb54fa86c2152ebf",
-    "url": "./static/css/main.d860afed.chunk.css"
+    "revision": "22e94a8e6323bf84f91b",
+    "url": "./static/css/main.b777f732.chunk.css"
   },
   {
-    "revision": "1c097c6c2823e73b3944",
-    "url": "./static/js/2.b9ecbaf1.chunk.js"
+    "revision": "eb79293a97bc81c1cef9",
+    "url": "./static/js/2.96daea9b.chunk.js"
   },
   {
     "revision": "9fd5f5c4967b37bc74ad0888703f3832",
-    "url": "./static/js/2.b9ecbaf1.chunk.js.LICENSE.txt"
+    "url": "./static/js/2.96daea9b.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "cf59cb54fa86c2152ebf",
-    "url": "./static/js/main.134a3669.chunk.js"
+    "revision": "22e94a8e6323bf84f91b",
+    "url": "./static/js/main.b02e46f7.chunk.js"
   },
   {
     "revision": "8a6c1abedff664268cfe",
@@ -30,6 +30,10 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
     "revision": "0b7809bdc5cb332dc7720f8b812c3b54",
     "url": "./static/media/Helvetica-Bold-Font.0b7809bd.ttf"
+  },
+  {
+    "revision": "9d099c0df3b430de7a3ad8710da7d399",
+    "url": "./static/media/aboutImage.9d099c0d.jpg"
   },
   {
     "revision": "2d9a98856377100953c479bf5343a900",
@@ -76,6 +80,10 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "./static/media/doordelivery.d5b58496.jpg"
   },
   {
+    "revision": "05c5364f8004b141ada01b3983b6f6a7",
+    "url": "./static/media/insurance.05c5364f.jpg"
+  },
+  {
     "revision": "a1ff10f5ee4f65f252dcadf83de0b289",
     "url": "./static/media/interregion.a1ff10f5.jpeg"
   },
@@ -94,6 +102,10 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
     "revision": "3e4c6a071268c0b2b4fdfd6a2541da44",
     "url": "./static/media/more-customs.3e4c6a07.png"
+  },
+  {
+    "revision": "0bbbe657151d1c7f6535010c9df973c3",
+    "url": "./static/media/ourservices.0bbbe657.jpg"
   },
   {
     "revision": "3ed03550bec5860eac22ca0914059c7a",
