@@ -242,117 +242,37 @@ class Router {
   }
   ScheduleShipment(app, db) {
     app.post("/scheduledomestic", (req, res) => {
-      let payment = req.body.payment;
-      if (payment === "cash") {
-        const trackingid = Math.floor(100000000 + Math.random() * 900000);
-        db.query(
-          "INSERT INTO pickup SET ?",
-          {
-            senderid: req.body.sessionID,
-            trackingid: parseInt(trackingid),
-            senderphone: req.body.senderphone,
-            sendername: req.body.sendername,
-            fromstate: req.body.from,
-            tostate: req.body.to,
-            date: req.body.date,
-            time: req.body.time,
-            plocation: req.body.plocation,
-            dlocation: req.body.dlocation,
-            rname: req.body.rname,
-            rphone: req.body.rphone,
-            itemtype: req.body.itemtype,
-            itemweight: req.body.itemweight,
-            amount: req.body.amount,
-            payment: "In cash by sender or receiver",
-          },
-          (err, data, fields) => {
-            if (err) {
-              res.json({
-                success: false,
-                msg: "an error occured, please try again later",
-              });
-              return;
-            }
-            if (data) {
-              const credentials = {
-                apiKey:
-                  "739c3070dce5bf510a566d6bed6ae1c4c9451652ddc395cd535582da485857a9", // use your sandbox app API key for development in the test environment
-                username: "box1", // use 'sandbox' for development in the test environment
-              };
-              const AfricasTalking = require("africastalking")(credentials);
-
-              // Initialize a service e.g. SMS
-              const sms = AfricasTalking.SMS;
-
-              // Use the service
-              const options = {
-                to: ["+234" + req.body.senderphone],
-                message:
-                  "Your Pickup is scheduled and your tracking id is: " +
-                  " " +
-                  trackingid +
-                  " " +
-                  "Thank you for trusting us",
-                shortCode: "21524",
-                keyword: "Box1 Verification",
-              };
-
-              // Send message and capture the response or error
-              sms
-                .send(options)
-                .then((response) => {
-                  console.log(response);
-                })
-                .catch((error) => {
-                  console.log(error);
-                });
-
-              res.json({
-                success: true,
-                confirm: "no",
-                msg: "Pickup scheduled successfully, thank you",
-              });
-              return;
-            } else {
-              res.json({
-                success: false,
-                msg: "you have an error with your form",
-              });
-              return;
-            }
+      const trackingid = Math.floor(100000000 + Math.random() * 900000);
+      db.query(
+        "INSERT INTO pickup SET ?",
+        {
+          senderid: req.body.sessionID,
+          trackingid: parseInt(trackingid),
+          senderphone: req.body.senderphone,
+          sendername: req.body.sendername,
+          fromstate: req.body.from,
+          tostate: req.body.to,
+          date: req.body.date,
+          time: req.body.time,
+          plocation: req.body.plocation,
+          dlocation: req.body.dlocation,
+          rname: req.body.rname,
+          rphone: req.body.rphone,
+          itemtype: req.body.itemtype,
+          itemweight: req.body.itemweight,
+          amount: req.body.amount,
+          payment: "In cash by sender or receiver",
+        },
+        (err, data, fields) => {
+          if (err) {
+            res.json({
+              success: false,
+              msg: "an error occured, please try again later",
+            });
+            return;
           }
-        );
-      } else if (payment === "card") {
-        const trackingid = Math.floor(100000000 + Math.random() * 900000);
-        db.query(
-          "INSERT INTO pickup SET ?",
-          {
-            senderid: req.body.sessionID,
-            trackingid: parseInt(trackingid),
-            senderphone: req.body.senderphone,
-            sendername: req.body.sendername,
-            fromstate: req.body.from,
-            tostate: req.body.to,
-            date: req.body.date,
-            time: req.body.time,
-            plocation: req.body.plocation,
-            dlocation: req.body.dlocation,
-            rname: req.body.rname,
-            rphone: req.body.rphone,
-            itemtype: req.body.itemtype,
-            itemweight: req.body.itemweight,
-            amount: req.body.amount,
-            payment: "Paid with Card",
-          },
-          (err, data, fields) => {
-            if (err) {
-              res.json({
-                success: false,
-                msg: "an error occured, please try again later",
-              });
-              return;
-            }
-            if (data) {
+          if (data) {
+            if (req.body.payment === "card") {
               const credentials = {
                 apiKey:
                   "739c3070dce5bf510a566d6bed6ae1c4c9451652ddc395cd535582da485857a9", // use your sandbox app API key for development in the test environment
@@ -393,15 +313,55 @@ class Router {
               });
               return;
             } else {
+              const credentials = {
+                apiKey:
+                  "739c3070dce5bf510a566d6bed6ae1c4c9451652ddc395cd535582da485857a9", // use your sandbox app API key for development in the test environment
+                username: "box1", // use 'sandbox' for development in the test environment
+              };
+              const AfricasTalking = require("africastalking")(credentials);
+
+              // Initialize a service e.g. SMS
+              const sms = AfricasTalking.SMS;
+
+              // Use the service
+              const options = {
+                to: ["+234" + req.body.senderphone],
+                message:
+                  "Your Pickup is scheduled and your tracking id is: " +
+                  " " +
+                  trackingid +
+                  " " +
+                  "Thank you for trusting us",
+                shortCode: "21524",
+                keyword: "Box1 Verification",
+              };
+
+              // Send message and capture the response or error
+              sms
+                .send(options)
+                .then((response) => {
+                  console.log(response);
+                })
+                .catch((error) => {
+                  console.log(error);
+                });
+
               res.json({
-                success: false,
-                msg: "you have an error with your form",
+                success: true,
+                confirm: "no",
+                msg: "Pickup scheduled successfully, thank you",
               });
               return;
             }
+          } else {
+            res.json({
+              success: false,
+              msg: "you have an error with your form",
+            });
+            return;
           }
-        );
-      }
+        }
+      );
     });
   }
 
