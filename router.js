@@ -6,6 +6,10 @@ class Router {
     this.login(app, db);
     this.createAccount(app, db);
     this.verifyAccount(app, db);
+    this.RequestPickupCash(app, db);
+    this.RequestPickupCard(app, db);
+    this.RequestInterstateCash(app, db);
+    this.RequestInterstateCard(app, db);
     this.UpdatePersonal(app, db);
     this.UpdatePassword(app, db);
     this.ScheduleShipment(app, db);
@@ -95,6 +99,332 @@ class Router {
             res.json({
               success: true,
               msg: "account Created",
+            });
+            return;
+          } else {
+            res.json({
+              success: false,
+              msg: "you have an error with your form",
+            });
+            return;
+          }
+        }
+      );
+    });
+  }
+  RequestPickupCash(app, db) {
+    app.post("/requestpickupcash", (req, res) => {
+      const trackingid = Math.floor(100000000 + Math.random() * 900000);
+      let username = req.body.username;
+      db.query(
+        "INSERT INTO requestpickup SET ?",
+        {
+          trackingnumber: trackingid,
+          username: req.body.username,
+          sname: req.body.sname,
+          fromlocation: req.body.fromlocation,
+          sward: req.body.sward,
+          plocation: req.body.plocation,
+          rname: req.body.rname,
+          rphone: req.body.rphone,
+          tolocation: req.body.tolocation,
+          rward: req.body.rward,
+          dlocation: req.body.dlocation,
+          itemtype: req.body.itemtype,
+          amount: req.body.amount,
+          paymenttype: req.body.paymenttype,
+        },
+        (err, data, fields) => {
+          if (err) {
+            res.json({
+              success: false,
+              msg: "db problem",
+            });
+            return;
+          }
+          if (data) {
+            const credentials = {
+              apiKey:
+                "739c3070dce5bf510a566d6bed6ae1c4c9451652ddc395cd535582da485857a9",
+              username: "box1",
+            };
+            const AfricasTalking = require("africastalking")(credentials);
+
+            // Initialize a service e.g. SMS
+            const sms = AfricasTalking.SMS;
+
+            // Use the service
+            const options = {
+              to: ["+234" + username],
+              message:
+                "Your Pickup is scheduled and your tracking id is: " +
+                " " +
+                trackingid +
+                " " +
+                "Please bear in mind our driver will collect at cash Naira:" +
+                req.body.amount +
+                "from you thank you.",
+              shortCode: "21524",
+              keyword: "Box1 Verification",
+            };
+
+            // Send message and capture the response or error
+            sms
+              .send(options)
+              .then((response) => {
+                console.log(response);
+              })
+              .catch((error) => {
+                console.log(error);
+              });
+
+            res.json({
+              success: true,
+              msg: "Shipment Placed Successfully",
+            });
+            return;
+          } else {
+            res.json({
+              success: false,
+              msg: "you have an error with your form",
+            });
+            return;
+          }
+        }
+      );
+    });
+  }
+  RequestPickupCard(app, db) {
+    app.post("/requestpickupcard", (req, res) => {
+      const trackingid = Math.floor(100000000 + Math.random() * 900000);
+      let username = req.body.username;
+      db.query(
+        "INSERT INTO requestpickup SET ?",
+        {
+          trackingnumber: trackingid,
+          username: req.body.username,
+          sname: req.body.sname,
+          fromlocation: req.body.fromlocation,
+          sward: req.body.sward,
+          plocation: req.body.plocation,
+          rname: req.body.rname,
+          rphone: req.body.rphone,
+          tolocation: req.body.tolocation,
+          rward: req.body.rward,
+          dlocation: req.body.dlocation,
+          itemtype: req.body.itemtype,
+          amount: req.body.amount,
+          paymenttype: req.body.paymenttype,
+        },
+        (err, data, fields) => {
+          if (err) {
+            res.json({
+              success: false,
+              msg: "db problem",
+            });
+            return;
+          }
+          if (data) {
+            const credentials = {
+              apiKey:
+                "739c3070dce5bf510a566d6bed6ae1c4c9451652ddc395cd535582da485857a9",
+              username: "box1",
+            };
+            const AfricasTalking = require("africastalking")(credentials);
+
+            // Initialize a service e.g. SMS
+            const sms = AfricasTalking.SMS;
+
+            // Use the service
+            const options = {
+              to: ["+234" + username],
+              message:
+                "Your Pickup is scheduled and your tracking id is: " +
+                " " +
+                trackingid +
+                " " +
+                "Please Complete your payment to enable us send a biker as soon as possible",
+              shortCode: "21524",
+              keyword: "Box1 Verification",
+            };
+
+            // Send message and capture the response or error
+            sms
+              .send(options)
+              .then((response) => {
+                console.log(response);
+              })
+              .catch((error) => {
+                console.log(error);
+              });
+
+            res.json({
+              success: true,
+              msg: "Shipment Placed Successfully",
+            });
+            return;
+          } else {
+            res.json({
+              success: false,
+              msg: "you have an error with your form",
+            });
+            return;
+          }
+        }
+      );
+    });
+  }
+  RequestInterstateCard(app, db) {
+    app.post("/requestinterstatecard", (req, res) => {
+      const trackingid = Math.floor(100000000 + Math.random() * 900000);
+      let username = req.body.username;
+      db.query(
+        "INSERT INTO requestpickup SET ?",
+        {
+          trackingnumber: trackingid,
+          username: req.body.username,
+          sname: req.body.sname,
+          fromlocation: req.body.fromlocation,
+          sward: req.body.sward,
+          plocation: req.body.plocation,
+          rname: req.body.rname,
+          rphone: req.body.rphone,
+          tolocation: req.body.tolocation,
+          rward: req.body.rward,
+          dlocation: req.body.dlocation,
+          itemtype: req.body.itemtype,
+          amount: req.body.amount,
+          paymenttype: req.body.paymenttype,
+          itemweight: req.body.itemweight,
+        },
+        (err, data, fields) => {
+          if (err) {
+            res.json({
+              success: false,
+              msg: "db problem",
+            });
+            return;
+          }
+          if (data) {
+            const credentials = {
+              apiKey:
+                "739c3070dce5bf510a566d6bed6ae1c4c9451652ddc395cd535582da485857a9",
+              username: "box1",
+            };
+            const AfricasTalking = require("africastalking")(credentials);
+
+            // Initialize a service e.g. SMS
+            const sms = AfricasTalking.SMS;
+
+            // Use the service
+            const options = {
+              to: ["+234" + username],
+              message:
+                "Your Pickup is scheduled and your tracking id is: " +
+                " " +
+                trackingid +
+                " " +
+                "Please Complete your payment to enable us send a biker as soon as possible",
+              shortCode: "21524",
+              keyword: "Box1 Verification",
+            };
+
+            // Send message and capture the response or error
+            sms
+              .send(options)
+              .then((response) => {
+                console.log(response);
+              })
+              .catch((error) => {
+                console.log(error);
+              });
+
+            res.json({
+              success: true,
+              msg: "Shipment Placed Successfully",
+            });
+            return;
+          } else {
+            res.json({
+              success: false,
+              msg: "you have an error with your form",
+            });
+            return;
+          }
+        }
+      );
+    });
+  }
+  RequestInterstateCash(app, db) {
+    app.post("/requestinterstatecash", (req, res) => {
+      const trackingid = Math.floor(100000000 + Math.random() * 900000);
+      let username = req.body.username;
+      db.query(
+        "INSERT INTO requestpickup SET ?",
+        {
+          trackingnumber: trackingid,
+          username: req.body.username,
+          sname: req.body.sname,
+          fromlocation: req.body.fromlocation,
+          sward: req.body.sward,
+          plocation: req.body.plocation,
+          rname: req.body.rname,
+          rphone: req.body.rphone,
+          tolocation: req.body.tolocation,
+          rward: req.body.rward,
+          dlocation: req.body.dlocation,
+          itemtype: req.body.itemtype,
+          amount: req.body.amount,
+          paymenttype: req.body.paymenttype,
+          itemweight: req.body.itemweight,
+        },
+        (err, data, fields) => {
+          if (err) {
+            res.json({
+              success: false,
+              msg: "db problem",
+            });
+            return;
+          }
+          if (data) {
+            const credentials = {
+              apiKey:
+                "739c3070dce5bf510a566d6bed6ae1c4c9451652ddc395cd535582da485857a9",
+              username: "box1",
+            };
+            const AfricasTalking = require("africastalking")(credentials);
+
+            // Initialize a service e.g. SMS
+            const sms = AfricasTalking.SMS;
+
+            // Use the service
+            const options = {
+              to: ["+234" + username],
+              message:
+                "Your Pickup is scheduled and your tracking id is: " +
+                " " +
+                trackingid +
+                " " +
+                "Please bear in mind our driver will collect at cash Naira:" +
+                req.body.amount +
+                "from you thank you.",
+              shortCode: "21524",
+              keyword: "Box1 Verification",
+            };
+
+            // Send message and capture the response or error
+            sms
+              .send(options)
+              .then((response) => {
+                console.log(response);
+              })
+              .catch((error) => {
+                console.log(error);
+              });
+
+            res.json({
+              success: true,
+              msg: "Shipment Placed Successfully",
             });
             return;
           } else {
@@ -209,12 +539,11 @@ class Router {
   }
   UpdatePassword(app, db) {
     app.post("/updatepassword", (req, res) => {
-      let id = req.body.sessionID;
+      let username = req.body.username;
+      let oldpassword = req.body.oldpassword;
       db.query(
-        "UPDATE users SET password='" +
-          bcrypt.hashSync(req.body.password, 9) +
-          "' WHERE id= ?",
-        id,
+        "SELECT * FROM users WHERE username = ? LIMIT 1",
+        username,
         (err, data, fields) => {
           if (err) {
             res.json({
@@ -223,16 +552,53 @@ class Router {
             });
             return;
           }
-          if (data) {
-            res.json({
-              success: true,
-              msg: "Password Change Successful",
-            });
-            return;
+          if (data && data.length === 1) {
+            bcrypt.compare(
+              oldpassword,
+              data[0].password,
+              (bcryptErr, verified) => {
+                if (verified) {
+                  db.query(
+                    "UPDATE users SET password='" +
+                      bcrypt.hashSync(req.body.password, 9) +
+                      "' WHERE id= ?",
+                    id,
+                    (err, data, fields) => {
+                      if (err) {
+                        res.json({
+                          success: false,
+                          msg: "an error occured, please try again later",
+                        });
+                        return;
+                      }
+                      if (data) {
+                        res.json({
+                          success: true,
+                          msg: "Password Change Successful",
+                        });
+                        return;
+                      } else {
+                        res.json({
+                          success: false,
+                          msg: "server error, try later",
+                        });
+                        return;
+                      }
+                    }
+                  );
+                } else {
+                  res.json({
+                    success: false,
+                    msg: "Old and New Password must Match",
+                  });
+                  return;
+                }
+              }
+            );
           } else {
             res.json({
               success: false,
-              msg: "server error, try later",
+              msg: "invalid username or password",
             });
             return;
           }
@@ -453,10 +819,10 @@ class Router {
   }
   fetchhistory(app, db) {
     app.post("/fetchhistory", (req, res) => {
-      let id = req.body.sessionID;
+      let username = req.body.username;
       db.query(
-        "SELECT * FROM pickup WHERE status='success' AND senderid = ?",
-        id,
+        "SELECT * FROM requestpickup WHERE username = ?",
+        username,
         (err, data, fields) => {
           if (data) {
             res.end(JSON.stringify(data));
