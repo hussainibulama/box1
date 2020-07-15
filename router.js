@@ -117,23 +117,7 @@ class Router {
       const trackingid = Math.floor(100000000 + Math.random() * 900000);
       let username = req.body.username;
       db.query(
-        "INSERT INTO requestpickup SET ?",
-        {
-          trackingnumber: trackingid,
-          username: req.body.username,
-          sname: req.body.sname,
-          fromlocation: req.body.fromlocation,
-          sward: req.body.sward,
-          plocation: req.body.plocation,
-          rname: req.body.rname,
-          rphone: req.body.rphone,
-          tolocation: req.body.tolocation,
-          rward: req.body.rward,
-          dlocation: req.body.dlocation,
-          itemtype: req.body.itemtype,
-          amount: req.body.amount,
-          paymenttype: req.body.paymenttype,
-        },
+        `INSERT INTO requestpickup (trackingnumber, username, sname, fromlocation, sward, plocation, rname, rphone, tolocation, rward, dlocation, itemtype, amount, paymenttype) VALUES ('${trackingid}', '${req.body.username}', '${req.body.sname}', '${req.body.fromlocation}', '${req.body.sward}', '${req.body.plocation}', '${req.body.rname}', '${req.body.rphone}', '${req.body.tolocation}', '${req.body.rward}', '${req.body.dlocation}', '${req.body.itemtype}', '${req.body.amount}', '${req.body.paymenttype}')`,
         (err, data, fields) => {
           if (err) {
             res.json({
@@ -155,6 +139,32 @@ class Router {
 
             // Use the service
             const options = {
+              to: ["+234" + req.body.rphone],
+              message:
+                "An item has been shipped to you with a tracking id: " +
+                " " +
+                trackingid +
+                " " +
+                "Please bear in mind if your sender fails to pay at cash our driver will collect Naira:" +
+                " " +
+                req.body.amount +
+                " " +
+                "from you as the shipment fee thank you.",
+              shortCode: "21524",
+              keyword: "Box1 Verification",
+            };
+
+            // Send message and capture the response or error
+            sms
+              .send(options)
+              .then((response) => {
+                console.log(response);
+              })
+              .catch((error) => {
+                console.log(error);
+              });
+            // Use the service
+            const options2 = {
               to: ["+234" + username],
               message:
                 "Your Pickup is scheduled and your tracking id is: " +
@@ -170,7 +180,7 @@ class Router {
 
             // Send message and capture the response or error
             sms
-              .send(options)
+              .send(options2)
               .then((response) => {
                 console.log(response);
               })
@@ -198,32 +208,27 @@ class Router {
     app.post("/requestpickupcard", (req, res) => {
       const trackingid = Math.floor(100000000 + Math.random() * 900000);
       let username = req.body.username;
+      var record = {
+        trackingnumber: trackingid,
+        username: req.body.username,
+        sname: req.body.sname,
+        fromlocation: req.body.fromlocation,
+        sward: req.body.sward,
+        plocation: req.body.plocation,
+        rname: req.body.rname,
+        rphone: req.body.rphone,
+        tolocation: req.body.tolocation,
+        rward: req.body.rward,
+        dlocation: req.body.dlocation,
+        itemtype: req.body.itemtype,
+        amount: req.body.amount,
+        paymenttype: req.body.paymenttype,
+      };
       db.query(
         "INSERT INTO requestpickup SET ?",
-        {
-          trackingnumber: trackingid,
-          username: req.body.username,
-          sname: req.body.sname,
-          fromlocation: req.body.fromlocation,
-          sward: req.body.sward,
-          plocation: req.body.plocation,
-          rname: req.body.rname,
-          rphone: req.body.rphone,
-          tolocation: req.body.tolocation,
-          rward: req.body.rward,
-          dlocation: req.body.dlocation,
-          itemtype: req.body.itemtype,
-          amount: req.body.amount,
-          paymenttype: req.body.paymenttype,
-        },
+        record,
         (err, data, fields) => {
-          if (err) {
-            res.json({
-              success: false,
-              msg: "db problem",
-            });
-            return;
-          }
+          if (err) throw err;
           if (data) {
             const credentials = {
               apiKey:
@@ -251,6 +256,26 @@ class Router {
             // Send message and capture the response or error
             sms
               .send(options)
+              .then((response) => {
+                console.log(response);
+              })
+              .catch((error) => {
+                console.log(error);
+              });
+            const options2 = {
+              to: ["+234" + req.body.rphone],
+              message:
+                "An Item has been shipped to you with trackingid" +
+                " " +
+                trackingid +
+                ". The item is on its way now and will be delivered as soon as possible. Thank You",
+              shortCode: "21524",
+              keyword: "Box1 Verification",
+            };
+
+            // Send message and capture the response or error
+            sms
+              .send(options2)
               .then((response) => {
                 console.log(response);
               })
@@ -338,6 +363,26 @@ class Router {
               .catch((error) => {
                 console.log(error);
               });
+            const options2 = {
+              to: ["+234" + req.body.rphone],
+              message:
+                "An Item has been shipped to you with trackingid" +
+                " " +
+                trackingid +
+                ". The item is on its way now and will be delivered as soon as possible. Thank You",
+              shortCode: "21524",
+              keyword: "Box1 Verification",
+            };
+
+            // Send message and capture the response or error
+            sms
+              .send(options2)
+              .then((response) => {
+                console.log(response);
+              })
+              .catch((error) => {
+                console.log(error);
+              });
 
             res.json({
               success: true,
@@ -415,6 +460,27 @@ class Router {
             // Send message and capture the response or error
             sms
               .send(options)
+              .then((response) => {
+                console.log(response);
+              })
+              .catch((error) => {
+                console.log(error);
+              });
+            const options2 = {
+              to: ["+234" + username],
+              message:
+                "Your Pickup is scheduled and your tracking id is: " +
+                " " +
+                trackingid +
+                " " +
+                "Please Complete your payment to enable us send a biker as soon as possible",
+              shortCode: "21524",
+              keyword: "Box1 Verification",
+            };
+
+            // Send message and capture the response or error
+            sms
+              .send(options2)
               .then((response) => {
                 console.log(response);
               })
