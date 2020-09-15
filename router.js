@@ -944,7 +944,7 @@ class Router {
     app.post("/trackshipment", (req, res) => {
       let trackingid = req.body.trackingid;
       db.query(
-        "SELECT status FROM pickup WHERE trackingid= ?",
+        "SELECT status FROM requestpickup WHERE trackingid= ?",
         trackingid,
         (err, data, fields) => {
           if (data && data.length === 1) {
