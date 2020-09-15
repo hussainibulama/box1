@@ -1,19 +1,19 @@
 {
   "files": {
-    "main.css": "./static/css/main.ff51c56b.chunk.css",
-    "main.js": "./static/js/main.a5913f8a.chunk.js",
-    "main.js.map": "./static/js/main.a5913f8a.chunk.js.map",
+    "main.css": "./static/css/main.9e433ce1.chunk.css",
+    "main.js": "./static/js/main.feede9ec.chunk.js",
+    "main.js.map": "./static/js/main.feede9ec.chunk.js.map",
     "runtime-main.js": "./static/js/runtime-main.e89ea8f3.js",
     "runtime-main.js.map": "./static/js/runtime-main.e89ea8f3.js.map",
     "static/css/2.5206c547.chunk.css": "./static/css/2.5206c547.chunk.css",
-    "static/js/2.f487b74c.chunk.js": "./static/js/2.f487b74c.chunk.js",
-    "static/js/2.f487b74c.chunk.js.map": "./static/js/2.f487b74c.chunk.js.map",
+    "static/js/2.8dc2643e.chunk.js": "./static/js/2.8dc2643e.chunk.js",
+    "static/js/2.8dc2643e.chunk.js.map": "./static/js/2.8dc2643e.chunk.js.map",
     "index.html": "./index.html",
-    "precache-manifest.4bf947c5e679438fbc544cbfeab2c6aa.js": "./precache-manifest.4bf947c5e679438fbc544cbfeab2c6aa.js",
+    "precache-manifest.adad48c1ce0e7844aab76d83e83b8324.js": "./precache-manifest.adad48c1ce0e7844aab76d83e83b8324.js",
     "service-worker.js": "./service-worker.js",
     "static/css/2.5206c547.chunk.css.map": "./static/css/2.5206c547.chunk.css.map",
-    "static/css/main.ff51c56b.chunk.css.map": "./static/css/main.ff51c56b.chunk.css.map",
-    "static/js/2.f487b74c.chunk.js.LICENSE.txt": "./static/js/2.f487b74c.chunk.js.LICENSE.txt",
+    "static/css/main.9e433ce1.chunk.css.map": "./static/css/main.9e433ce1.chunk.css.map",
+    "static/js/2.8dc2643e.chunk.js.LICENSE.txt": "./static/js/2.8dc2643e.chunk.js.LICENSE.txt",
     "static/media/App.css": "./static/media/pos-bg.a7070a62.png",
     "static/media/abuja-map.jpg": "./static/media/abuja-map.2d9a9885.jpg",
     "static/media/apple-store.png": "./static/media/apple-store.5169b377.png",
@@ -21,6 +21,7 @@
     "static/media/box1-cycle.png": "./static/media/box1-cycle.636cfbc5.png",
     "static/media/box1-vans.png": "./static/media/box1-vans.bf2b81aa.png",
     "static/media/box11.png": "./static/media/box11.7a2a216b.png",
+    "static/media/cac-logo.png": "./static/media/cac-logo.37377eb2.png",
     "static/media/doc.svg": "./static/media/doc.80a488b3.svg",
     "static/media/document.png": "./static/media/document.befed9f4.png",
     "static/media/doordelivery.jpg": "./static/media/doordelivery.d5b58496.jpg",
@@ -38,8 +39,8 @@
   "entrypoints": [
     "static/js/runtime-main.e89ea8f3.js",
     "static/css/2.5206c547.chunk.css",
-    "static/js/2.f487b74c.chunk.js",
-    "static/css/main.ff51c56b.chunk.css",
-    "static/js/main.a5913f8a.chunk.js"
+    "static/js/2.8dc2643e.chunk.js",
+    "static/css/main.9e433ce1.chunk.css",
+    "static/js/main.feede9ec.chunk.js"
   ]
 }
